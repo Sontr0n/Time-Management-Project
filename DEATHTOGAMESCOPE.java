@@ -1,6 +1,7 @@
-import javax.swing.JWindow;
-import java.lang.Runtime;
-import java.util.*;
+import javax.swing.*;
+import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class DEATHTOGAMESCOPE {
     public static int fleetTimer = 0;
@@ -9,6 +10,10 @@ public class DEATHTOGAMESCOPE {
     public static boolean stayOpen = true;
     public static boolean isOWOpen = isOpen("Overwatch");
     public static boolean isFleetOpen = isOpen("Fleet");
+    static JLabel l = new JLabel();
+    static JPanel p = new JPanel();
+    static JFrame f=new JFrame("Transparent JTextField");
+    static String lab = "";
 
 
     public static void main(String[] args) {
@@ -18,17 +23,28 @@ public class DEATHTOGAMESCOPE {
             public void run() {
                 isOWOpen = isOpen("Overwatch");
                 if (isOWOpen && canPlayGames) {
+                    lab = String.format("%02d:%02d:%02d", (int)(owTimer/3600), (int)(owTimer%3600/60), (owTimer%3600%60));
+                    l.setText(lab);
+                    l.setForeground(Color.green);
+                    f.repaint();
+                    f.setVisible(true);
                     owTimer++;
                     if (owTimer >= 2400){
                         canPlayGames = false;
                         fleetTimer = 0;
                         kill("Overwatch");
                     }
-                } else kill("Overwatch");
+                } 
 
                 if (canPlayGames == false) {
                     isFleetOpen = isOpen("Fleet");
+                    kill("Overwatch");
                     if (isFleetOpen){
+                        lab = String.format("%02d:%02d:%02d", (int)(fleetTimer/3600), (int)(fleetTimer%3600/60), (fleetTimer%3600%60));
+                        l.setText(lab);
+                        l.setForeground(Color.pink);
+                        f.repaint();
+                        f.setVisible(true);
                         fleetTimer++;
 
                         if (fleetTimer >= 7200) {
@@ -45,11 +61,21 @@ public class DEATHTOGAMESCOPE {
             };
 
 
+            //set up the timer window
+            l.setFont(new Font("Arial", Font.PLAIN, 48));
+            l.setForeground(Color.green);
+            l.setOpaque(false);
+            p.add(l);
+            f.add(p);
+            f.setSize(300,50);
+            f.setUndecorated(true);
+            f.setAlwaysOnTop(true);
+            p.setBackground(new Color(1.0f, 1.0f, 1.0f, 0.0f));
+            f.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
+            f.setLocation(1650, 5);
 
 
-
-
-
+            //run the loop
             timer.schedule(tick, 0, 1000);
 
 
@@ -70,3 +96,4 @@ public class DEATHTOGAMESCOPE {
             }
 
 }
+
