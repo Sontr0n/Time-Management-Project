@@ -3,7 +3,7 @@ import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class DEATHTOGAMESCOPE {
+public class TimeManager {
     public static int fleetTimer = 0;
     public static int owTimer = 0;
     public static boolean canPlayGames = false;
